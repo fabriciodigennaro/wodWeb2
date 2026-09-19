@@ -1,0 +1,37 @@
+:host {
+  display: block;
+}
+
+.button-primary,
+.button-ghost {
+  width: 100%;
+  border-radius: 0.75rem;
+  padding: 1rem 1.5rem;
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  transition:
+    opacity 150ms ease,
+    background-color 150ms ease;
+}
+
+.button-primary {
+  background-color: var(--color-tac-glare);
+  color: var(--color-tac-black);
+}
+
+.button-primary:active {
+  opacity: 0.8;
+}
+
+.button-ghost {
+  border: 1px solid var(--color-tac-grey);
+  color: var(--color-tac-sand);
+}
+
+.button-ghost:active {
+  background-color: var(--color-tac-grey);
+  color: var(--color-tac-bone);
+}

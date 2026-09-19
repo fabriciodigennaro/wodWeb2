@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <base href="/" />
+    <title>WodWeb2</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  </head>
+  <body>
+    <script>
+      sessionStorage.redirect = location.pathname + location.search;
+      location.href = '/?redirect=' + encodeURIComponent(sessionStorage.redirect);
+    </script>
+  </body>
+</html>

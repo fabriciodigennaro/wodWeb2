@@ -1,3 +1,40 @@
-/* You can add global styles to this file, and also import other style files */
-
 @import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Segoe UI', system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, 'Cascadia Mono', 'Consolas', 'SFMono-Regular', Menlo, monospace;
+  --font-display: var(--font-mono);
+
+  --color-tac-black: #0c0e0a;
+  --color-tac-charcoal: #161913;
+  --color-tac-grey: #2a2e25;
+  --color-tac-olive: #5a6423;
+  --color-tac-military: #49521e;
+  --color-tac-sand: #c2b280;
+  --color-tac-bone: #ede8dc;
+  --color-tac-glare: #cfff41;
+}
+
+@layer base {
+  html,
+  body {
+    min-height: 100dvh;
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--color-tac-black);
+    color: var(--color-tac-bone);
+    font-family: var(--font-sans);
+    -webkit-tap-highlight-color: transparent;
+    overscroll-behavior: none;
+  }
+}
+
+@utility glow {
+  text-shadow: 0 0 20px color-mix(in srgb, var(--color-tac-glare) 60%, transparent);
+}
+
+@utility glow-soft {
+  text-shadow: 0 0 14px color-mix(in srgb, var(--color-tac-glare) 35%, transparent);
+}

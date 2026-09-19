@@ -1,0 +1,49 @@
+<main
+  class="mx-auto flex min-h-dvh w-full max-w-xl flex-col px-4 pt-[calc(1.5rem+env(safe-area-inset-top))] pb-[calc(1.5rem+env(safe-area-inset-bottom))]"
+>
+  <header class="mb-8">
+    <h1
+      class="font-display text-2xl font-bold uppercase tracking-[0.35em] text-tac-glare glow-soft"
+    >
+      WOD Timer
+    </h1>
+    <p class="mt-2 text-sm text-tac-sand">Elige tu temporizador</p>
+  </header>
+
+  @if (recents().length > 0) {
+    <section aria-label="Recientes" class="mb-8">
+      <h2 class="mb-3 text-sm uppercase tracking-[0.3em] text-tac-sand">Recientes</h2>
+      <div class="flex flex-col gap-2">
+        @for (config of recents(); track $index) {
+          <button
+            type="button"
+            (click)="onOpenRecent(config)"
+            class="flex items-center justify-between rounded-lg border border-tac-grey bg-tac-charcoal px-4 py-3 text-left transition-colors hover:border-tac-olive active:bg-tac-grey"
+          >
+            <span class="text-sm text-tac-glare">{{ timerLabel(config) }}</span>
+            <span class="text-xl text-tac-sand">›</span>
+          </button>
+        }
+      </div>
+    </section>
+  }
+
+  <nav aria-label="Temporizadores" class="flex flex-col gap-3">
+    @for (timer of timers; track timer.kind) {
+      <a
+        [routerLink]="['/timers/setup', timer.kind]"
+        class="group flex items-center justify-between rounded-lg border border-tac-grey bg-tac-charcoal px-5 py-4 transition-colors hover:border-tac-olive active:bg-tac-grey"
+      >
+        <span>
+          <span class="block font-display text-xl uppercase tracking-widest text-tac-bone">{{
+            timer.label
+          }}</span>
+          <span class="block text-sm text-tac-sand">{{ timer.description }}</span>
+        </span>
+        <span class="text-2xl text-tac-glare transition-transform group-hover:translate-x-0.5"
+          >›</span
+        >
+      </a>
+    }
+  </nav>
+</main>

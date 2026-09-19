@@ -1,0 +1,119 @@
+<main
+  class="mx-auto flex min-h-dvh w-full max-w-xl flex-col overflow-hidden px-4 pt-[calc(1rem+env(safe-area-inset-top))] pb-[calc(1.5rem+env(safe-area-inset-bottom))]"
+>
+  @let state = engine.state();
+
+  <header class="flex w-full items-center justify-between">
+    <button
+      type="button"
+      class="-ml-2 rounded-md p-2 text-2xl text-tac-sand transition-colors hover:text-tac-bone"
+      aria-label="Volver al inicio"
+      (click)="onBackHome()"
+    >
+      ‹
+    </button>
+    <h2 class="font-display text-sm font-semibold uppercase tracking-[0.35em] text-tac-sand">
+      {{ headerText() }}
+    </h2>
+    <span class="w-8"></span>
+  </header>
+
+  <section class="flex w-full flex-grow flex-col items-center justify-center gap-6 landscape:gap-2">
+    <div
+      class="rounded-full border border-tac-olive bg-tac-charcoal px-5 py-1 text-xs uppercase tracking-[0.3em] text-tac-glare landscape:text-[0.65rem]"
+      aria-live="polite"
+    >
+      {{ statusText() }}
+    </div>
+
+    <div
+      class="font-display font-bold leading-none text-tac-glare glow text-[clamp(6rem,24vw,16rem)] landscape:text-[clamp(4rem,24vh,13rem)]"
+      aria-label="Tiempo restante"
+    >
+      {{ timeText() }}
+    </div>
+
+    @if (showRound()) {
+      <div class="flex items-center gap-3" aria-label="Ronda actual">
+        <span
+          class="font-display text-xl uppercase tracking-widest text-tac-bone landscape:text-base"
+        >
+          Ronda {{ engine.round() }}
+        </span>
+        @if (state === TimerState.Running && isAmrap()) {
+          <button
+            type="button"
+            class="rounded-md border border-tac-olive bg-tac-charcoal px-3 py-1 font-display text-sm font-bold text-tac-glare transition-colors hover:bg-tac-grey"
+            (click)="onIncrementRound()"
+          >
+            +1
+          </button>
+        }
+      </div>
+    }
+  </section>
+
+  <footer
+    class="flex w-full flex-col items-center gap-3 pt-6 landscape:flex-row landscape:justify-center landscape:gap-4 landscape:pt-4"
+  >
+    @if (state === TimerState.Ready) {
+      <button
+        type="button"
+        class="button-primary landscape:w-auto landscape:min-w-56"
+        (click)="onStart()"
+      >
+        Iniciar
+      </button>
+    } @else if (state === TimerState.Paused) {
+      <button
+        type="button"
+        class="button-primary landscape:w-auto landscape:min-w-56"
+        (click)="onResume()"
+      >
+        Reanudar
+      </button>
+      <button
+        type="button"
+        class="button-ghost landscape:w-auto landscape:min-w-56"
+        (click)="onReset()"
+      >
+        Reiniciar
+      </button>
+    } @else if (state === TimerState.Finished) {
+      <div
+        class="flex flex-col items-center gap-3 landscape:flex-row landscape:items-center landscape:gap-6"
+      >
+        <span class="font-display text-lg uppercase tracking-[0.3em] text-tac-glare"
+          >¡Buen trabajo!</span
+        >
+        @if (showRound()) {
+          <span class="font-display text-2xl text-tac-bone">Ronda final {{ engine.round() }}</span>
+        }
+        <button
+          type="button"
+          class="button-primary landscape:w-auto landscape:min-w-56"
+          (click)="onReset()"
+        >
+          Reiniciar
+        </button>
+      </div>
+    } @else {
+      <button
+        type="button"
+        class="button-ghost landscape:w-auto landscape:min-w-56"
+        (click)="onReset()"
+      >
+        Reiniciar
+      </button>
+      @if (!isAmrap()) {
+        <button
+          type="button"
+          class="button-primary landscape:w-auto landscape:min-w-56"
+          (click)="onPause()"
+        >
+          Pausa
+        </button>
+      }
+    }
+  </footer>
+</main>

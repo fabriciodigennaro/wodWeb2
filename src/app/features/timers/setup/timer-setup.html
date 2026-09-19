@@ -1,0 +1,455 @@
+<main
+  class="mx-auto flex min-h-dvh w-full max-w-xl flex-col px-4 pt-[calc(1.5rem+env(safe-area-inset-top))] pb-[calc(1.5rem+env(safe-area-inset-bottom))]"
+>
+  @if (kind() === TimerKind.Amrap) {
+    <header class="mb-8 flex items-center gap-3">
+      <button
+        type="button"
+        class="-ml-2 rounded-md p-2 text-2xl text-tac-sand transition-colors hover:text-tac-bone"
+        aria-label="Volver al inicio"
+        (click)="onBackHome()"
+      >
+        ‹
+      </button>
+      <div>
+        <h1
+          class="font-display text-2xl font-bold uppercase tracking-[0.3em] text-tac-glare glow-soft"
+        >
+          AMRAP
+        </h1>
+        <p class="text-sm text-tac-sand">Máximas rondas en el tiempo</p>
+      </div>
+    </header>
+
+    <section class="flex flex-col gap-6">
+      <div class="flex flex-col gap-2">
+        <label for="amrap-minutes" class="text-sm uppercase tracking-widest text-tac-sand"
+          >Duración</label
+        >
+        <div class="flex items-center gap-2 font-display">
+          <input
+            id="amrap-minutes"
+            type="number"
+            min="0"
+            inputmode="numeric"
+            class="w-full rounded-lg border border-tac-grey bg-tac-charcoal px-4 py-3 text-center text-3xl text-tac-glare outline-none focus:border-tac-olive"
+            [value]="amrapMinutes()"
+            (input)="onMinutesInput($event)"
+          />
+          <span class="text-tac-sand">
+            <span class="text-xl">:</span> <span class="text-sm">min</span>
+          </span>
+          <input
+            id="amrap-seconds"
+            type="number"
+            min="0"
+            max="59"
+            inputmode="numeric"
+            class="w-full rounded-lg border border-tac-grey bg-tac-charcoal px-4 py-3 text-center text-3xl text-tac-glare outline-none focus:border-tac-olive"
+            [value]="amrapSeconds()"
+            (input)="onSecondsInput($event)"
+          />
+          <span class="w-14 text-sm text-tac-sand">seg</span>
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label for="amrap-prep" class="text-sm uppercase tracking-widest text-tac-sand"
+          >Prep (get ready)</label
+        >
+        <input
+          id="amrap-prep"
+          type="number"
+          min="0"
+          max="60"
+          inputmode="numeric"
+          class="w-full rounded-lg border border-tac-grey bg-tac-charcoal px-4 py-3 text-center text-3xl text-tac-bone outline-none focus:border-tac-olive"
+          [value]="prepSeconds()"
+          (input)="onPrepInput($event)"
+        />
+        <span class="text-sm text-tac-sand">segundos antes de empezar</span>
+      </div>
+    </section>
+
+    <div class="mt-auto flex flex-col gap-2 pt-8">
+      <button
+        type="button"
+        class="rounded-lg bg-tac-glare px-6 py-4 font-display text-lg font-bold uppercase tracking-[0.3em] text-tac-black transition-opacity disabled:cursor-not-allowed disabled:opacity-30"
+        [disabled]="amrapInvalid()"
+        (click)="onStartAmrap()"
+      >
+        Empezar
+      </button>
+    </div>
+  } @else if (kind() === TimerKind.Emom) {
+    <header class="mb-8 flex items-center gap-3">
+      <button
+        type="button"
+        class="-ml-2 rounded-md p-2 text-2xl text-tac-sand transition-colors hover:text-tac-bone"
+        aria-label="Volver al inicio"
+        (click)="onBackHome()"
+      >
+        ‹
+      </button>
+      <div>
+        <h1
+          class="font-display text-2xl font-bold uppercase tracking-[0.3em] text-tac-glare glow-soft"
+        >
+          EMOM
+        </h1>
+        <p class="text-sm text-tac-sand">Cada minuto sobre el minuto</p>
+      </div>
+    </header>
+
+    <section class="flex flex-col gap-6">
+      <div class="flex flex-col gap-2">
+        <label for="emom-interval" class="text-sm uppercase tracking-widest text-tac-sand"
+          >Intervalo</label
+        >
+        <input
+          id="emom-interval"
+          type="number"
+          min="1"
+          inputmode="numeric"
+          class="w-full rounded-lg border border-tac-grey bg-tac-charcoal px-4 py-3 text-center text-3xl text-tac-glare outline-none focus:border-tac-olive"
+          [value]="emomIntervalSeconds()"
+          (input)="onEmomIntervalInput($event)"
+        />
+        <span class="text-sm text-tac-sand">segundos por ronda</span>
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label for="emom-rounds" class="text-sm uppercase tracking-widest text-tac-sand"
+          >Rondas</label
+        >
+        <input
+          id="emom-rounds"
+          type="number"
+          min="1"
+          inputmode="numeric"
+          class="w-full rounded-lg border border-tac-grey bg-tac-charcoal px-4 py-3 text-center text-3xl text-tac-bone outline-none focus:border-tac-olive"
+          [value]="emomRounds()"
+          (input)="onEmomRoundsInput($event)"
+        />
+        <span class="text-sm text-tac-sand">núm. de rondas</span>
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label for="emom-prep" class="text-sm uppercase tracking-widest text-tac-sand"
+          >Prep (get ready)</label
+        >
+        <input
+          id="emom-prep"
+          type="number"
+          min="0"
+          max="60"
+          inputmode="numeric"
+          class="w-full rounded-lg border border-tac-grey bg-tac-charcoal px-4 py-3 text-center text-3xl text-tac-bone outline-none focus:border-tac-olive"
+          [value]="prepSeconds()"
+          (input)="onPrepInput($event)"
+        />
+        <span class="text-sm text-tac-sand">segundos antes de empezar</span>
+      </div>
+    </section>
+
+    <div class="mt-auto flex flex-col gap-2 pt-8">
+      <button
+        type="button"
+        class="rounded-lg bg-tac-glare px-6 py-4 font-display text-lg font-bold uppercase tracking-[0.3em] text-tac-black transition-opacity disabled:cursor-not-allowed disabled:opacity-30"
+        [disabled]="emomInvalid()"
+        (click)="onStartEmom()"
+      >
+        Empezar
+      </button>
+    </div>
+  } @else if (kind() === TimerKind.ForTime) {
+    <header class="mb-8 flex items-center gap-3">
+      <button
+        type="button"
+        class="-ml-2 rounded-md p-2 text-2xl text-tac-sand transition-colors hover:text-tac-bone"
+        aria-label="Volver al inicio"
+        (click)="onBackHome()"
+      >
+        ‹
+      </button>
+      <div>
+        <h1
+          class="font-display text-2xl font-bold uppercase tracking-[0.3em] text-tac-glare glow-soft"
+        >
+          For Time
+        </h1>
+        <p class="text-sm text-tac-sand">Nada más empezar, cuenta hacia arriba</p>
+      </div>
+    </header>
+
+    <section class="flex flex-col gap-6">
+      <div class="flex flex-col gap-2">
+        <label for="fortime-cap-minutes" class="text-sm uppercase tracking-widest text-tac-sand"
+          >Time cap</label
+        >
+        <div class="flex gap-3">
+          <input
+            id="fortime-cap-minutes"
+            type="number"
+            min="0"
+            inputmode="numeric"
+            class="w-full min-w-0 rounded-lg border border-tac-grey bg-tac-charcoal px-4 py-3 text-center text-3xl text-tac-glare outline-none focus:border-tac-olive"
+            [value]="fortimeCapMinutes()"
+            (input)="onFortimeCapMinutesInput($event)"
+          />
+          <span class="flex items-center text-2xl text-tac-sand">:</span>
+          <input
+            id="fortime-cap-seconds"
+            type="number"
+            min="0"
+            max="59"
+            inputmode="numeric"
+            class="w-full min-w-0 rounded-lg border border-tac-grey bg-tac-charcoal px-4 py-3 text-center text-3xl text-tac-bone outline-none focus:border-tac-olive"
+            [value]="fortimeCapSeconds()"
+            (input)="onFortimeCapSecondsInput($event)"
+          />
+        </div>
+        <span class="text-sm text-tac-sand"
+          >minutos : segundos · deja 0:00 para entrenar sin límite</span
+        >
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label for="fortime-prep" class="text-sm uppercase tracking-widest text-tac-sand"
+          >Prep (get ready)</label
+        >
+        <input
+          id="fortime-prep"
+          type="number"
+          min="0"
+          max="60"
+          inputmode="numeric"
+          class="w-full rounded-lg border border-tac-grey bg-tac-charcoal px-4 py-3 text-center text-3xl text-tac-bone outline-none focus:border-tac-olive"
+          [value]="prepSeconds()"
+          (input)="onPrepInput($event)"
+        />
+        <span class="text-sm text-tac-sand">segundos antes de empezar</span>
+      </div>
+    </section>
+
+    <div class="mt-auto flex flex-col gap-2 pt-8">
+      <button
+        type="button"
+        class="rounded-lg bg-tac-glare px-6 py-4 font-display text-lg font-bold uppercase tracking-[0.3em] text-tac-black transition-opacity disabled:cursor-not-allowed disabled:opacity-30"
+        [disabled]="fortimeInvalid()"
+        (click)="onStartFortime()"
+      >
+        Empezar
+      </button>
+    </div>
+  } @else if (kind() === TimerKind.Tabata) {
+    <header class="mb-8 flex items-center gap-3">
+      <button
+        type="button"
+        class="-ml-2 rounded-md p-2 text-2xl text-tac-sand transition-colors hover:text-tac-bone"
+        aria-label="Volver al inicio"
+        (click)="onBackHome()"
+      >
+        ‹
+      </button>
+      <div>
+        <h1
+          class="font-display text-2xl font-bold uppercase tracking-[0.3em] text-tac-glare glow-soft"
+        >
+          Tabata
+        </h1>
+        <p class="text-sm text-tac-sand">Work · rest · rondas</p>
+      </div>
+    </header>
+
+    <section class="flex flex-col gap-6">
+      <div class="flex flex-col gap-2">
+        <label for="tabata-work" class="text-sm uppercase tracking-widest text-tac-sand"
+          >Work</label
+        >
+        <input
+          id="tabata-work"
+          type="number"
+          min="1"
+          inputmode="numeric"
+          class="w-full rounded-lg border border-tac-grey bg-tac-charcoal px-4 py-3 text-center text-3xl text-tac-glare outline-none focus:border-tac-olive"
+          [value]="tabataWorkSeconds()"
+          (input)="onTabataWorkInput($event)"
+        />
+        <span class="text-sm text-tac-sand">segundos de trabajo</span>
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label for="tabata-rest" class="text-sm uppercase tracking-widest text-tac-sand"
+          >Rest</label
+        >
+        <input
+          id="tabata-rest"
+          type="number"
+          min="1"
+          inputmode="numeric"
+          class="w-full rounded-lg border border-tac-grey bg-tac-charcoal px-4 py-3 text-center text-3xl text-tac-bone outline-none focus:border-tac-olive"
+          [value]="tabataRestSeconds()"
+          (input)="onTabataRestInput($event)"
+        />
+        <span class="text-sm text-tac-sand">segundos de descanso</span>
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label for="tabata-rounds" class="text-sm uppercase tracking-widest text-tac-sand"
+          >Rondas</label
+        >
+        <input
+          id="tabata-rounds"
+          type="number"
+          min="1"
+          inputmode="numeric"
+          class="w-full rounded-lg border border-tac-grey bg-tac-charcoal px-4 py-3 text-center text-3xl text-tac-bone outline-none focus:border-tac-olive"
+          [value]="tabataRounds()"
+          (input)="onTabataRoundsInput($event)"
+        />
+        <span class="text-sm text-tac-sand">núm. de rondas</span>
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label for="tabata-prep" class="text-sm uppercase tracking-widest text-tac-sand"
+          >Prep (get ready)</label
+        >
+        <input
+          id="tabata-prep"
+          type="number"
+          min="0"
+          max="60"
+          inputmode="numeric"
+          class="w-full rounded-lg border border-tac-grey bg-tac-charcoal px-4 py-3 text-center text-3xl text-tac-bone outline-none focus:border-tac-olive"
+          [value]="prepSeconds()"
+          (input)="onPrepInput($event)"
+        />
+        <span class="text-sm text-tac-sand">segundos antes de empezar</span>
+      </div>
+    </section>
+
+    <div class="mt-auto flex flex-col gap-2 pt-8">
+      <button
+        type="button"
+        class="rounded-lg bg-tac-glare px-6 py-4 font-display text-lg font-bold uppercase tracking-[0.3em] text-tac-black transition-opacity disabled:cursor-not-allowed disabled:opacity-30"
+        [disabled]="tabataInvalid()"
+        (click)="onStartTabata()"
+      >
+        Empezar
+      </button>
+    </div>
+  } @else if (kind() === TimerKind.Interval) {
+    <header class="mb-8 flex items-center gap-3">
+      <button
+        type="button"
+        class="-ml-2 rounded-md p-2 text-2xl text-tac-sand transition-colors hover:text-tac-bone"
+        aria-label="Volver al inicio"
+        (click)="onBackHome()"
+      >
+        ‹
+      </button>
+      <div>
+        <h1
+          class="font-display text-2xl font-bold uppercase tracking-[0.3em] text-tac-glare glow-soft"
+        >
+          Interval
+        </h1>
+        <p class="text-sm text-tac-sand">Work · rest · rondas</p>
+      </div>
+    </header>
+
+    <section class="flex flex-col gap-6">
+      <div class="flex flex-col gap-2">
+        <label for="interval-work" class="text-sm uppercase tracking-widest text-tac-sand"
+          >Work</label
+        >
+        <input
+          id="interval-work"
+          type="number"
+          min="1"
+          inputmode="numeric"
+          class="w-full rounded-lg border border-tac-grey bg-tac-charcoal px-4 py-3 text-center text-3xl text-tac-glare outline-none focus:border-tac-olive"
+          [value]="intervalWorkSeconds()"
+          (input)="onIntervalWorkInput($event)"
+        />
+        <span class="text-sm text-tac-sand">segundos de trabajo</span>
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label for="interval-rest" class="text-sm uppercase tracking-widest text-tac-sand"
+          >Rest</label
+        >
+        <input
+          id="interval-rest"
+          type="number"
+          min="1"
+          inputmode="numeric"
+          class="w-full rounded-lg border border-tac-grey bg-tac-charcoal px-4 py-3 text-center text-3xl text-tac-bone outline-none focus:border-tac-olive"
+          [value]="intervalRestSeconds()"
+          (input)="onIntervalRestInput($event)"
+        />
+        <span class="text-sm text-tac-sand">segundos de descanso</span>
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label for="interval-rounds" class="text-sm uppercase tracking-widest text-tac-sand"
+          >Rondas</label
+        >
+        <input
+          id="interval-rounds"
+          type="number"
+          min="1"
+          inputmode="numeric"
+          class="w-full rounded-lg border border-tac-grey bg-tac-charcoal px-4 py-3 text-center text-3xl text-tac-bone outline-none focus:border-tac-olive"
+          [value]="intervalRounds()"
+          (input)="onIntervalRoundsInput($event)"
+        />
+        <span class="text-sm text-tac-sand">núm. de rondas</span>
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label for="interval-prep" class="text-sm uppercase tracking-widest text-tac-sand"
+          >Prep (get ready)</label
+        >
+        <input
+          id="interval-prep"
+          type="number"
+          min="0"
+          max="60"
+          inputmode="numeric"
+          class="w-full rounded-lg border border-tac-grey bg-tac-charcoal px-4 py-3 text-center text-3xl text-tac-bone outline-none focus:border-tac-olive"
+          [value]="prepSeconds()"
+          (input)="onPrepInput($event)"
+        />
+        <span class="text-sm text-tac-sand">segundos antes de empezar</span>
+      </div>
+    </section>
+
+    <div class="mt-auto flex flex-col gap-2 pt-8">
+      <button
+        type="button"
+        class="rounded-lg bg-tac-glare px-6 py-4 font-display text-lg font-bold uppercase tracking-[0.3em] text-tac-black transition-opacity disabled:cursor-not-allowed disabled:opacity-30"
+        [disabled]="intervalInvalid()"
+        (click)="onStartInterval()"
+      >
+        Empezar
+      </button>
+    </div>
+  } @else {
+    <header class="mb-8 flex items-center gap-3">
+      <button
+        type="button"
+        class="-ml-2 rounded-md p-2 text-2xl text-tac-sand transition-colors hover:text-tac-bone"
+        aria-label="Volver al inicio"
+        (click)="onBackHome()"
+      >
+        ‹
+      </button>
+      <h1 class="font-display text-2xl font-bold uppercase tracking-[0.3em] text-tac-bone">
+        Próximamente
+      </h1>
+    </header>
+    <p class="text-tac-sand">{{ kind() }} está en desarrollo en una futura fase.</p>
+  }
+</main>
