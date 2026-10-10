@@ -5,23 +5,9 @@
     <title>WodWeb2</title>
     <base href="/" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <link rel="icon" id="favicon" type="image/svg+xml" href="/favicon-main.svg" />
+    <link rel="icon" type="image/svg+xml" href="/favicon-main.svg" />
     <link rel="manifest" href="manifest.webmanifest" />
     <meta name="theme-color" content="#0c0e0a" />
-    <script>
-      (function() {
-        // Detect if we're in preprod (wodWeb2pre in URL)
-        var isPreprod = window.location.pathname.startsWith('/wodWeb2pre/') ||
-                        window.location.hostname.includes('preprod') ||
-                        window.location.href.includes('wodWeb2pre');
-        var favicon = document.getElementById('favicon');
-        var metaTheme = document.querySelector('meta[name="theme-color"]');
-        if (isPreprod && favicon) {
-          favicon.href = '/favicon-preprod.svg';
-          if (metaTheme) metaTheme.content = '#1a0f05';
-        }
-      })();
-    </script>
   </head>
   <body>
     <app-root></app-root>
