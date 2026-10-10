@@ -25,21 +25,6 @@ const ROUND_KINDS = new Set([
   TimerKind.Interval,
 ]);
 
-function statusLabel(state: TimerState, phase: TimerPhase): string {
-  switch (state) {
-    case TimerState.Ready:
-      return 'Listo';
-    case TimerState.Prep:
-      return 'Get ready';
-    case TimerState.Running:
-      return phase === TimerPhase.Rest ? 'Descanso' : 'Corriendo';
-    case TimerState.Paused:
-      return 'Pausa';
-    case TimerState.Finished:
-      return '¡Tiempo!';
-  }
-}
-
 @Component({
   selector: 'app-timer-screen',
   imports: [],
