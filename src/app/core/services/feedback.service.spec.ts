@@ -18,6 +18,8 @@ describe('TimerFeedbackService', () => {
       supported: () => true,
       ensureUnlocked: () => Promise.resolve(),
       play,
+      setVolume: vi.fn(),
+      getVolume: () => 0.5,
     };
     const haptics: HapticGateway = { supported: () => true, buzz };
     TestBed.configureTestingModule({

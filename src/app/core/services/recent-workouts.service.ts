@@ -29,6 +29,17 @@ export class RecentWorkoutsService {
     this.recents.set(next);
     await this.storage.set(RECENTS_KEY, next);
   }
+
+  async remove(config: TimerConfig): Promise<void> {
+    const next = this.recents().filter((item) => !sameConfig(item, config));
+    this.recents.set(next);
+    await this.storage.set(RECENTS_KEY, next);
+  }
+
+  async clear(): Promise<void> {
+    this.recents.set([]);
+    await this.storage.delete(RECENTS_KEY);
+  }
 }
 
 function sameConfig(a: TimerConfig, b: TimerConfig): boolean {

@@ -412,7 +412,7 @@
         <label for="interval-prep" class="text-sm uppercase tracking-widest text-tac-sand"
           >Prep (get ready)</label
         >
-        <input
+<input
           id="interval-prep"
           type="number"
           min="0"
@@ -432,6 +432,134 @@
         class="rounded-lg bg-tac-glare px-6 py-4 font-display text-lg font-bold uppercase tracking-[0.3em] text-tac-black transition-opacity disabled:cursor-not-allowed disabled:opacity-30"
         [disabled]="intervalInvalid()"
         (click)="onStartInterval()"
+      >
+        Empezar
+      </button>
+    </div>
+  } @else if (kind() === TimerKind.Countdown) {
+    <header class="mb-8 flex items-center gap-3">
+      <button
+        type="button"
+        class="-ml-2 rounded-md p-2 text-2xl text-tac-sand transition-colors hover:text-tac-bone"
+        aria-label="Volver al inicio"
+        (click)="onBackHome()"
+      >
+        ‹
+      </button>
+      <div>
+        <h1
+          class="font-display text-2xl font-bold uppercase tracking-[0.3em] text-tac-glare glow-soft"
+        >
+          Countdown
+        </h1>
+        <p class="text-sm text-tac-sand">Cuenta atrás simple</p>
+      </div>
+    </header>
+
+    <section class="flex flex-col gap-6">
+      <div class="flex flex-col gap-2">
+        <label for="countdown-minutes" class="text-sm uppercase tracking-widest text-tac-sand"
+          >Duración</label
+        >
+        <div class="flex items-center gap-2 font-display">
+          <input
+            id="countdown-minutes"
+            type="number"
+            min="0"
+            inputmode="numeric"
+            class="w-full rounded-lg border border-tac-grey bg-tac-charcoal px-4 py-3 text-center text-3xl text-tac-glare outline-none focus:border-tac-olive"
+            [value]="countdownMinutes()"
+            (input)="onCountdownMinutesInput($event)"
+          />
+          <span class="text-tac-sand">
+            <span class="text-xl">:</span> <span class="text-sm">min</span>
+          </span>
+          <input
+            id="countdown-seconds"
+            type="number"
+            min="0"
+            max="59"
+            inputmode="numeric"
+            class="w-full rounded-lg border border-tac-grey bg-tac-charcoal px-4 py-3 text-center text-3xl text-tac-glare outline-none focus:border-tac-olive"
+            [value]="countdownSeconds()"
+            (input)="onCountdownSecondsInput($event)"
+          />
+          <span class="w-14 text-sm text-tac-sand">seg</span>
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label for="countdown-prep" class="text-sm uppercase tracking-widest text-tac-sand"
+          >Prep (get ready)</label
+        >
+        <input
+          id="countdown-prep"
+          type="number"
+          min="0"
+          max="60"
+          inputmode="numeric"
+          class="w-full rounded-lg border border-tac-grey bg-tac-charcoal px-4 py-3 text-center text-3xl text-tac-bone outline-none focus:border-tac-olive"
+          [value]="prepSeconds()"
+          (input)="onPrepInput($event)"
+        />
+        <span class="text-sm text-tac-sand">segundos antes de empezar</span>
+      </div>
+    </section>
+
+    <div class="mt-auto flex flex-col gap-2 pt-8">
+      <button
+        type="button"
+        class="rounded-lg bg-tac-glare px-6 py-4 font-display text-lg font-bold uppercase tracking-[0.3em] text-tac-black transition-opacity disabled:cursor-not-allowed disabled:opacity-30"
+        [disabled]="countdownInvalid()"
+        (click)="onStartCountdown()"
+      >
+        Empezar
+      </button>
+    </div>
+  } @else if (kind() === TimerKind.Stopwatch) {
+    <header class="mb-8 flex items-center gap-3">
+      <button
+        type="button"
+        class="-ml-2 rounded-md p-2 text-2xl text-tac-sand transition-colors hover:text-tac-bone"
+        aria-label="Volver al inicio"
+        (click)="onBackHome()"
+      >
+        ‹
+      </button>
+      <div>
+        <h1
+          class="font-display text-2xl font-bold uppercase tracking-[0.3em] text-tac-glare glow-soft"
+        >
+          Cronómetro
+        </h1>
+        <p class="text-sm text-tac-sand">Cuenta libre hacia arriba</p>
+      </div>
+    </header>
+
+    <section class="flex flex-col gap-6">
+      <div class="flex flex-col gap-2">
+        <label for="stopwatch-prep" class="text-sm uppercase tracking-widest text-tac-sand"
+          >Prep (get ready)</label
+        >
+        <input
+          id="stopwatch-prep"
+          type="number"
+          min="0"
+          max="60"
+          inputmode="numeric"
+          class="w-full rounded-lg border border-tac-grey bg-tac-charcoal px-4 py-3 text-center text-3xl text-tac-bone outline-none focus:border-tac-olive"
+          [value]="prepSeconds()"
+          (input)="onPrepInput($event)"
+        />
+        <span class="text-sm text-tac-sand">segundos antes de empezar</span>
+      </div>
+    </section>
+
+    <div class="mt-auto flex flex-col gap-2 pt-8">
+      <button
+        type="button"
+        class="rounded-lg bg-tac-glare px-6 py-4 font-display text-lg font-bold uppercase tracking-[0.3em] text-tac-black transition-opacity disabled:cursor-not-allowed disabled:opacity-30"
+        (click)="onStartStopwatch()"
       >
         Empezar
       </button>

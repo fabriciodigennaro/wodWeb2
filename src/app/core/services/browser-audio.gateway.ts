@@ -7,6 +7,8 @@ export class BrowserAudioGateway implements AudioGateway {
   private readonly supportedFlag =
     typeof window !== 'undefined' && ('AudioContext' in window || 'webkitAudioContext' in window);
   private context: AudioContext | null = null;
+  private masterGain: GainNode | null = null;
+  private volume = 0.5;
 
   supported(): boolean {
     return this.supportedFlag;
@@ -20,6 +22,17 @@ export class BrowserAudioGateway implements AudioGateway {
     return context.state === 'suspended'
       ? context.resume().then(() => undefined)
       : Promise.resolve();
+  }
+
+  setVolume(volume: number): void {
+    this.volume = Math.max(0, Math.min(1, volume));
+    if (this.masterGain !== null) {
+      this.masterGain.gain.value = this.volume;
+    }
+  }
+
+  getVolume(): number {
+    return this.volume;
   }
 
   play(cue: TimerCue): void {
@@ -50,6 +63,9 @@ export class BrowserAudioGateway implements AudioGateway {
         return null;
       }
       this.context = new AudioCtor();
+      this.masterGain = this.context.createGain();
+      this.masterGain.gain.value = this.volume;
+      this.masterGain.connect(this.context.destination);
     }
     return this.context;
   }
@@ -69,7 +85,7 @@ export class BrowserAudioGateway implements AudioGateway {
     gain.gain.exponentialRampToValueAtTime(0.35, now + 0.02);
     gain.gain.exponentialRampToValueAtTime(0.0001, now + durationSeconds);
     oscillator.connect(gain);
-    gain.connect(context.destination);
+    gain.connect(this.masterGain ?? context.destination);
     oscillator.start(now);
     oscillator.stop(now + durationSeconds + 0.05);
   }

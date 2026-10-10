@@ -74,8 +74,28 @@ function buildSchedule(
     }
     boundary += segment.durationMs;
     const isFinal = boundary === totalMs;
-    for (const offset of [PREP_WARN_WINDOW_MS, 2000, 1000]) {
-      const elapsedMs = boundary - offset;
+    // Schedule warning ticks only if they fall strictly within the segment (not at boundaries)
+    // For segments shorter than the warning window, the Go/Finish cue serves as the signal
+    if (segment.durationMs > PREP_WARN_WINDOW_MS) {
+      for (const offset of [PREP_WARN_WINDOW_MS, 2000, 1000]) {
+        const elapsedMs = boundary - offset;
+        // Use >= for 3s warning so it fires even at exact boundaries (e.g., 3s segments)
+        // Deduplication in TimerFeedbackService handles coinciding Go cues
+        if (elapsedMs >= previousBoundary) {
+          cues.push({ elapsedMs, kind: TimerCueKind.Tick });
+        }
+      }
+    } else if (segment.durationMs > 2000) {
+      // Segment allows 2s and 1s warnings
+      for (const offset of [2000, 1000]) {
+        const elapsedMs = boundary - offset;
+        if (elapsedMs > previousBoundary) {
+          cues.push({ elapsedMs, kind: TimerCueKind.Tick });
+        }
+      }
+    } else if (segment.durationMs > 1000) {
+      // Segment allows only 1s warning
+      const elapsedMs = boundary - 1000;
       if (elapsedMs > previousBoundary) {
         cues.push({ elapsedMs, kind: TimerCueKind.Tick });
       }
@@ -210,7 +230,7 @@ export class TimerEngine {
       const programElapsedMs = elapsedMs - this.prepMs;
       if (programElapsedMs >= this.programMs) {
         this.state.set(TimerState.Finished);
-        this.elapsedMs.set(elapsedMs);
+        this.elapsedMs.set(this.isCountUp ? programElapsedMs : elapsedMs);
         this.remainingMs.set(0);
       } else {
         const [index, offsetMs] = this.locateSegment(programElapsedMs);
@@ -218,7 +238,7 @@ export class TimerEngine {
         this.state.set(TimerState.Running);
         this.phase.set(segment.phase);
         this.round.set(this.roundForSegment(index));
-        this.elapsedMs.set(elapsedMs);
+        this.elapsedMs.set(this.isCountUp ? programElapsedMs : elapsedMs);
         this.remainingMs.set(
           Number.isFinite(segment.durationMs) ? segment.durationMs - offsetMs : -1,
         );

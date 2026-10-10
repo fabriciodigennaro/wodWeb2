@@ -334,13 +334,28 @@ describe('TimerSetupComponent', () => {
     expect(navigate).toHaveBeenCalledWith(['/timers/screen']);
   });
 
-  it('announces that other kinds are not ready yet', () => {
+  it('renders a Countdown setup screen', () => {
     configure(TimerKind.Countdown);
     const fixture = TestBed.createComponent(TimerSetupComponent);
     fixture.detectChanges();
 
     const text = (fixture.nativeElement as HTMLElement).textContent ?? '';
-    expect(text).toContain('Próximamente');
-    expect(text).toContain('countdown');
+    expect(text).toContain('Countdown');
+    expect(text).toContain('Cuenta atrás simple');
+    expect(text).toContain('Duración');
+    expect(text).toContain('Prep (get ready)');
+    expect(text).toContain('Empezar');
+  });
+
+  it('renders a Stopwatch setup screen', () => {
+    configure(TimerKind.Stopwatch);
+    const fixture = TestBed.createComponent(TimerSetupComponent);
+    fixture.detectChanges();
+
+    const text = (fixture.nativeElement as HTMLElement).textContent ?? '';
+    expect(text).toContain('Cronómetro');
+    expect(text).toContain('Cuenta libre hacia arriba');
+    expect(text).toContain('Prep (get ready)');
+    expect(text).toContain('Empezar');
   });
 });

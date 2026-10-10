@@ -5,9 +5,11 @@ import {
   defaultTimerConfig,
   isValidTimerConfig,
   type AmrapConfig,
+  type CountdownConfig,
   type EmomConfig,
   type ForTimeConfig,
   type IntervalConfig,
+  type StopwatchConfig,
   type TabataConfig,
   type TimerConfig,
 } from '@core/timer/config';
@@ -37,6 +39,8 @@ export class TimerSetupComponent {
   readonly intervalRestSeconds = signal(30);
   readonly intervalRounds = signal(8);
   readonly prepSeconds = signal(10);
+  readonly countdownMinutes = signal(10);
+  readonly countdownSeconds = signal(0);
 
   readonly amrapInvalid = computed(() => this.amrapMinutes() * 60 + this.amrapSeconds() <= 0);
 
@@ -67,6 +71,8 @@ export class TimerSetupComponent {
       !Number.isInteger(this.intervalRounds()) ||
       this.intervalRounds() < 1,
   );
+
+  readonly countdownInvalid = computed(() => this.countdownMinutes() * 60 + this.countdownSeconds() <= 0);
 
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
@@ -102,6 +108,12 @@ export class TimerSetupComponent {
       this.intervalRestSeconds.set(defaults.restSeconds);
       this.intervalRounds.set(defaults.rounds);
       this.prepSeconds.set(defaults.prepSeconds);
+    } else if (defaults.kind === TimerKind.Countdown) {
+      this.countdownMinutes.set(Math.floor(defaults.durationSeconds / 60));
+      this.countdownSeconds.set(defaults.durationSeconds % 60);
+      this.prepSeconds.set(defaults.prepSeconds);
+    } else if (defaults.kind === TimerKind.Stopwatch) {
+      this.prepSeconds.set(10);
     }
   }
 
@@ -181,6 +193,29 @@ export class TimerSetupComponent {
     this.startTimer(config);
   }
 
+  onStartCountdown(): void {
+    const config: TimerConfig = {
+      kind: TimerKind.Countdown,
+      prepSeconds: this.prepSeconds(),
+      durationSeconds: this.countdownMinutes() * 60 + this.countdownSeconds(),
+    } satisfies CountdownConfig;
+    if (!isValidTimerConfig(config)) {
+      return;
+    }
+    this.startTimer(config);
+  }
+
+  onStartStopwatch(): void {
+    const config: TimerConfig = {
+      kind: TimerKind.Stopwatch,
+      prepSeconds: this.prepSeconds(),
+    } satisfies StopwatchConfig;
+    if (!isValidTimerConfig(config)) {
+      return;
+    }
+    this.startTimer(config);
+  }
+
   onMinutesInput(event: Event): void {
     this.amrapMinutes.set(this.readNumber(event));
   }
@@ -227,6 +262,14 @@ export class TimerSetupComponent {
 
   onIntervalRoundsInput(event: Event): void {
     this.intervalRounds.set(this.readNumber(event));
+  }
+
+  onCountdownMinutesInput(event: Event): void {
+    this.countdownMinutes.set(this.readNumber(event));
+  }
+
+  onCountdownSecondsInput(event: Event): void {
+    this.countdownSeconds.set(this.readNumber(event));
   }
 
   onPrepInput(event: Event): void {

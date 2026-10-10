@@ -15,19 +15,12 @@
     <h2 class="font-display text-sm font-semibold uppercase tracking-[0.35em] text-tac-sand">
       {{ headerText() }}
     </h2>
-    <span class="w-8"></span>
+    <span class="w-10"></span>
   </header>
 
   <section class="flex w-full flex-grow flex-col items-center justify-center gap-6 landscape:gap-2">
     <div
-      class="rounded-full border border-tac-olive bg-tac-charcoal px-5 py-1 text-xs uppercase tracking-[0.3em] text-tac-glare landscape:text-[0.65rem]"
-      aria-live="polite"
-    >
-      {{ statusText() }}
-    </div>
-
-    <div
-      class="font-display font-bold leading-none text-tac-glare glow text-[clamp(6rem,24vw,16rem)] landscape:text-[clamp(4rem,24vh,13rem)]"
+      class="font-display font-bold leading-none text-tac-glare glow text-[clamp(6rem,24vw,16rem)] landscape:text-[clamp(8rem,35vh,20rem)]"
       aria-label="Tiempo restante"
     >
       {{ timeText() }}
@@ -43,8 +36,9 @@
         @if (state === TimerState.Running && isAmrap()) {
           <button
             type="button"
-            class="rounded-md border border-tac-olive bg-tac-charcoal px-3 py-1 font-display text-sm font-bold text-tac-glare transition-colors hover:bg-tac-grey"
+            class="rounded-lg border-2 border-tac-olive bg-tac-charcoal px-6 py-3 font-display text-lg font-bold text-tac-glare transition-colors hover:bg-tac-grey active:scale-95 min-h-[64px] min-w-[64px]"
             (click)="onIncrementRound()"
+            aria-label="Sumar ronda"
           >
             +1
           </button>

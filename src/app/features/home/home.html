@@ -1,28 +1,52 @@
 <main
   class="mx-auto flex min-h-dvh w-full max-w-xl flex-col px-4 pt-[calc(1.5rem+env(safe-area-inset-top))] pb-[calc(1.5rem+env(safe-area-inset-bottom))]"
 >
-  <header class="mb-8">
+  <header class="mb-8 flex items-center justify-between">
     <h1
       class="font-display text-2xl font-bold uppercase tracking-[0.35em] text-tac-glare glow-soft"
     >
       WOD Timer
     </h1>
-    <p class="mt-2 text-sm text-tac-sand">Elige tu temporizador</p>
+    <button
+      type="button"
+      class="w-10 h-10 rounded-full border border-tac-grey bg-tac-charcoal flex items-center justify-center text-tac-sand transition-colors hover:border-tac-olive hover:bg-tac-grey"
+      aria-label="Configuración"
+      (click)="settings.openSettings()"
+    >
+      ⚙
+    </button>
   </header>
+  <p class="mt-2 text-sm text-tac-sand mb-6">Elige tu temporizador</p>
+
+  <app-settings-modal [isOpen]="settings.isSettingsOpen()" (closed)="settings.closeSettings()" />
 
   @if (recents().length > 0) {
     <section aria-label="Recientes" class="mb-8">
       <h2 class="mb-3 text-sm uppercase tracking-[0.3em] text-tac-sand">Recientes</h2>
       <div class="flex flex-col gap-2">
         @for (config of recents(); track $index) {
-          <button
-            type="button"
-            (click)="onOpenRecent(config)"
-            class="flex items-center justify-between rounded-lg border border-tac-grey bg-tac-charcoal px-4 py-3 text-left transition-colors hover:border-tac-olive active:bg-tac-grey"
-          >
-            <span class="text-sm text-tac-glare">{{ timerLabel(config) }}</span>
-            <span class="text-xl text-tac-sand">›</span>
-          </button>
+          <div class="relative overflow-hidden">
+            <div
+              class="absolute inset-0 flex items-center justify-end pr-6 bg-red-600 transition-transform duration-200"
+              [style.transform]="'translateX(' + swipeOffset() + 'px)'"
+              [style.display]="swipingIndex() === $index ? 'flex' : 'none'"
+            >
+              <span class="text-white font-display text-sm uppercase tracking-[0.3em]">Eliminar</span>
+            </div>
+            <button
+              type="button"
+              (click)="onClickRecent($index)"
+              (touchstart)="onSwipeStart($index)"
+              (touchmove)="onSwipeMove($event)"
+              (touchend)="onSwipeEnd($index)"
+              [style.transform]="'translateX(' + (swipingIndex() === $index ? swipeOffset() : 0) + 'px)'"
+              class="flex items-center justify-between rounded-lg border border-tac-grey bg-tac-charcoal px-4 py-3 text-left transition-colors hover:border-tac-olive active:bg-tac-grey touch-none select-none"
+              data-swipe-start-x=""
+            >
+              <span class="text-sm text-tac-glare">{{ timerLabel(config) }}</span>
+              <span class="text-xl text-tac-sand">›</span>
+            </button>
+          </div>
         }
       </div>
     </section>

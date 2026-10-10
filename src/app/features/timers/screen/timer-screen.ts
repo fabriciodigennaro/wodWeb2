@@ -42,6 +42,7 @@ function statusLabel(state: TimerState, phase: TimerPhase): string {
 
 @Component({
   selector: 'app-timer-screen',
+  imports: [],
   styleUrl: './timer-screen.css',
   templateUrl: './timer-screen.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -61,8 +62,6 @@ export class TimerScreenComponent implements OnDestroy {
       ? formatClock(this.engine.elapsedMs())
       : formatClock(this.engine.remainingMs(), true);
   });
-
-  readonly statusText = computed(() => statusLabel(this.engine.state(), this.engine.phase()));
 
   readonly headerText = computed(() => timerLabel(this.engine.config));
 

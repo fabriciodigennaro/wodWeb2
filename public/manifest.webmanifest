@@ -1,9 +1,12 @@
 {
-  "name": "wodWeb2",
-  "short_name": "wodWeb2",
+  "name": "WWII · WOD Timer",
+  "short_name": "WWII",
+  "description": "Temporizador de WODs para CrossFit y entrenamiento funcional",
   "display": "standalone",
   "scope": "./",
   "start_url": "./",
+  "background_color": "#0c0e0a",
+  "theme_color": "#0c0e0a",
   "icons": [
     {
       "src": "icons/icon-72x72.png",
@@ -52,6 +55,23 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable any"
+    }
+  ],
+  "categories": ["fitness", "health", "sports"],
+  "shortcuts": [
+    {
+      "name": "AMRAP",
+      "short_name": "AMRAP",
+      "description": "Máximas rondas en el tiempo",
+      "url": "/timers/setup/amrap",
+      "icons": [{ "src": "icons/icon-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "EMOM",
+      "short_name": "EMOM",
+      "description": "Cada minuto sobre el minuto",
+      "url": "/timers/setup/emom",
+      "icons": [{ "src": "icons/icon-192x192.png", "sizes": "192x192" }]
     }
   ]
 }

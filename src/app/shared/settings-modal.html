@@ -1,0 +1,74 @@
+@if (isOpen()) {
+  <button
+    type="button"
+    class="fixed inset-0 z-50 flex items-end sm:items-center sm:justify-center bg-transparent"
+    (click)="onOverlayClick($event)"
+    (keyup.enter)="onClose()"
+    (keyup.escape)="onClose()"
+    aria-label="Cerrar configuración"
+  >
+    <div class="fixed inset-0 bg-tac-black/80 backdrop-blur-sm" aria-hidden="true"></div>
+
+    <div
+      class="relative w-full max-w-xl rounded-t-2xl sm:rounded-xl bg-tac-charcoal border border-tac-grey shadow-2xl overflow-hidden animate-slide-up"
+      tabindex="0"
+      (click)="$event.stopPropagation()"
+      (keyup.enter)="$event.stopPropagation()"
+      (keyup.space)="$event.stopPropagation()"
+    >
+      <header class="flex items-center justify-between border-b border-tac-grey px-4 py-4">
+        <h2 class="font-display text-lg font-bold uppercase tracking-[0.3em] text-tac-glare">Configuración</h2>
+        <button
+          type="button"
+          class="rounded-md p-2 text-2xl text-tac-sand transition-colors hover:text-tac-bone"
+          aria-label="Cerrar"
+          (click)="onClose()"
+          (keyup.enter)="onClose()"
+          (keyup.space)="onClose()"
+        >
+          ✕
+        </button>
+      </header>
+
+      <div class="p-4 space-y-6">
+        <section>
+          <h3 class="mb-3 text-sm uppercase tracking-widest text-tac-sand">Audio</h3>
+          <div class="flex flex-col gap-3">
+            <label class="flex items-center gap-3">
+              <span class="w-24 text-sm text-tac-bone">Volumen</span>
+              <input
+                type="range"
+                min="0"
+                max="100"
+                [value]="volumePercent()"
+                (input)="onVolumeChange($event)"
+                class="flex-1 h-6 accent-tac-glare"
+                aria-label="Volumen de los pitidos"
+              />
+              <span class="w-12 text-right font-display text-sm text-tac-glare">{{ volumePercent() }}%</span>
+            </label>
+            <button
+              type="button"
+              class="button-ghost w-full"
+              (click)="settings.setVolume(0.5)"
+            >
+              Restablecer (50%)
+            </button>
+          </div>
+        </section>
+
+        <section>
+          <h3 class="mb-3 text-sm uppercase tracking-widest text-tac-sand">Datos</h3>
+          <button
+            type="button"
+            class="button-ghost w-full text-red-400 hover:text-red-300 border-red-600/50 hover:border-red-600"
+            (click)="onClearRecents()"
+          >
+            Eliminar todos los WODs recientes
+          </button>
+          <p class="mt-2 text-xs text-tac-sand">Libera espacio eliminando el historial de entrenamientos guardados.</p>
+        </section>
+      </div>
+    </div>
+  </button>
+}
